@@ -1,6 +1,10 @@
-export default apps = [{
-  name: 'PALETTE',
-  script: './build/server.js',
+module.exports = {
+  apps: [{
+  name: 'app',
+  script: './app.js',
   instances: 0,
-  exec_mode: cluster,
-}]
+  exec_mode: ‘cluster’,
+  wait_ready: true,
+  listen_timeout: 50000
+  }]
+}
