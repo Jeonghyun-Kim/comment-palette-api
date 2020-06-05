@@ -40,7 +40,7 @@ const options = {
     colorize: false,
     format: combine(
       label({ label: 'WST' }),
-      appendTimestamp({ tz: 'Asis/Seoul' }),
+      appendTimestamp({ tz: 'Asia/Seoul' }),
       myFormat,
     ),
   },
@@ -53,7 +53,7 @@ const options = {
     timestamp: () => moment().format('YYYY-MM-DD HH:MM:ss'),
     format: combine(
       label({ label: 'WINSTON' }),
-      appendTimestamp({ tz: 'Asis/Seoul' }),
+      appendTimestamp({ tz: 'Asia/Seoul' }),
       myFormat,
     ),
   },
