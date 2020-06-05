@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
-  name: 'app',
-  script: './app.js',
+  name: 'PALETTE',
+  script: './build/server.js',
   instances: 0,
   exec_mode: ‘cluster’,
   wait_ready: true,
