@@ -3,4 +3,3 @@ package-lock.json
 .env
 src/logs
 /build
-ecosystem.config.js

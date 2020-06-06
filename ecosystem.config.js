@@ -8,13 +8,18 @@ module.exports = {
       // 개발환경시 적용될 설정 지정
       env: {
           "PORT": 8081,
-          "NODE_ENV": "development"
+          "NODE_ENV": "development",
       },
       // 배포환경시 적용될 설정 지정
       env_production: {
           "PORT": 8081,
-          "NODE_ENV": "production"
-      }
+          "NODE_ENV": "production",
+      },
+      watch: true,
+      instances: 0,
+      exec_mode: 'cluster',
+      wait_ready: true,
+      listen_timeout: 50000,
     }
   ]
 };

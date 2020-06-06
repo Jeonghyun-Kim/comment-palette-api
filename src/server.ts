@@ -58,4 +58,5 @@ app.use((err: Err, _req: Request, res: Response, _next: NextFunction) => {
 
 app.listen(app.get('port'), () => {
   logger.info(`SERVER LISTIENING ON PORT ${app.get('port')}`);
+  // process.send('ready');
 });
