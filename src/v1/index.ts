@@ -4,6 +4,7 @@ import * as sha256 from 'sha256';
 
 import { Comment } from '../models/Comment';
 import { Subscription } from '../models/Subscription';
+import logger from '../config/winston_config';
 
 const router: Router = express.Router();
 const version: string = '1.0.0';
@@ -30,6 +31,7 @@ router.post('/comment', async (req: Request, res: Response, next: NextFunction) 
   try {
     await Comment.create({ name, password: sha256(password), content });
 
+    logger.info(`[COMMENT CREATED] name: ${name}, content: ${content}`);
     return res.status(201).json({ error: 0 });
   } catch (err) {
     return next(err);
@@ -53,6 +55,7 @@ router.put('/comment', async (req: Request, res: Response, next: NextFunction) =
     }
     await comment.update({ name, content });
 
+    logger.info(`[COMMENT EDITED] id: ${id}, name: ${name}, content: ${content}`);
     return res.status(200).json({ name: comment.name, content: comment.content, error: 0 });
   } catch (err) {
     return next(err);
@@ -74,8 +77,10 @@ router.delete('/comment', async (req: Request, res: Response, next: NextFunction
     if (sha256(password) !== comment.password) {
       return res.status(401).json({ error: 401 });
     }
+    const { name, content } = comment;
     await comment.destroy();
 
+    logger.info(`[COMMENT DELETED] id: ${id}, name: ${name}, content: ${content}`);
     return res.status(200).json({ error: 0 });
   } catch (err) {
     return next(err);
@@ -88,6 +93,7 @@ router.post('/subscription', async (req: Request, res: Response, next: NextFunct
   try {
     const subscription = await Subscription.create({ email });
 
+    logger.info(`[NEW SUBSCRIPTION] email: ${email}`);
     return res.status(201).json({ email: subscription.email, error: 0 });
   } catch (err) {
     return next(err);
@@ -114,6 +120,8 @@ router.delete('/subscription', async (req: Request, res: Response, next: NextFun
     }
 
     await subscription.destroy();
+
+    logger.info(`[SUBSCRIPTION DELETED] email: ${email}`);
     return res.status(200).json({ error: 0 });
   } catch (err) {
     return next(err);
