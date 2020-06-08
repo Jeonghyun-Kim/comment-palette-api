@@ -44,7 +44,7 @@ app.all('*', (_req: Request, _res: Response, next: NextFunction) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Err, _req: Request, res: Response, _next: NextFunction) => {
-  logger.error(err);
+  logger.error(`NAME: ${err.name}, STATUE: ${err.status}, STACK: ${err.stack}`);
   if (err.name === 'SequelizeValidationError') {
     return res.status(400).json({ error: 400 });
   }
