@@ -1,6 +1,6 @@
 import {
   Model, Table, Column, DefaultScope, Scopes,
-  Length,
+  Length, DataType,
   CreatedAt, UpdatedAt, DeletedAt,
 } from 'sequelize-typescript';
 
@@ -32,7 +32,7 @@ export class Comment extends Model<Comment> {
   password!: string;
 
   @Length({ min: 3, max: 2000 })
-  @Column
+  @Column(DataType.TEXT)
   content!: string;
 
   @CreatedAt
