@@ -31,7 +31,7 @@ export class Comment extends Model<Comment> {
   @Column
   password!: string;
 
-  @Length({ min: 3, max: 500 })
+  @Length({ min: 3, max: 2000 })
   @Column
   content!: string;
 
