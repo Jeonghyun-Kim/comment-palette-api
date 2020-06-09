@@ -25,9 +25,9 @@ const portHttps = 443;
 const app: Application = express();
 
 const sslOptions = {
-  ca: fs.readFileSync('/etc/letsencrypt/live/api-cert/fullchain.pem'),
-  key: fs.readFileSync('/etc/letsencrypt/live/api-cert/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/api-cert/cert.pem'),
+  ca: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/fullchain.pem'),
+  key: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/cert.pem'),
 };
 
 sequelize.sync();
