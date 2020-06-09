@@ -4,6 +4,9 @@ import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as helmet from 'helmet';
+import * as http from 'http';
+import * as https from 'https';
+import * as fs from 'fs';
 import 'dotenv/config';
 
 import logger from './config/winston_config';
@@ -15,12 +18,20 @@ const CUSTOM: string = ':remote-addr - :remote-user ":method :url HTTP/:http-ver
 interface Err extends Error {
   status: number;
 }
+
+const portHttp = 80;
+const portHttps = 443;
+
 const app: Application = express();
+
+const sslOptions = {
+  ca: fs.readFileSync('/etc/letsencrypt/live/api-cert/fullchain.pem'),
+  key: fs.readFileSync('/etc/letsencrypt/live/api-cert/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/api-cert/cert.pem'),
+};
 
 sequelize.sync();
 // sequelize.sync({ force: true });
-
-app.set('port', process.env.PORT || 8081);
 
 app.use(cors());
 app.use(helmet());
@@ -57,7 +68,12 @@ app.use((err: Err, _req: Request, res: Response, _next: NextFunction) => {
     .json({ errName: err.name, errMsg: err.message, errStack: err.stack });
 });
 
-app.listen(app.get('port'), () => {
-  logger.info(`SERVER LISTIENING ON PORT ${app.get('port')}`);
-  // process.send('ready');
+http.createServer(app).listen(portHttp, () => {
+  logger.info(`HTTP SERVER LISTIENING ON PORT ${portHttp}`);
+  process.send('ready');
+});
+
+https.createServer(sslOptions, app).listen(portHttps, () => {
+  logger.info(`HTTPS SERVER LISTIENING ON PORT ${portHttps}`);
+  process.send('ready');
 });
