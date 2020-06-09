@@ -70,10 +70,10 @@ app.use((err: Err, _req: Request, res: Response, _next: NextFunction) => {
 
 http.createServer(app).listen(portHttp, () => {
   logger.info(`HTTP SERVER LISTIENING ON PORT ${portHttp}`);
-  process.send('ready');
+  // process.send('ready');
 });
 
 https.createServer(sslOptions, app).listen(portHttps, () => {
   logger.info(`HTTPS SERVER LISTIENING ON PORT ${portHttps}`);
-  process.send('ready');
+  // process.send('ready');
 });
