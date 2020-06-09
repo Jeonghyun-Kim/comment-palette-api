@@ -9,7 +9,7 @@ module.exports = {
           "PORT": 8081,
           "NODE_ENV": "production",
       },
-      watch: true,
+      // watch: true,
       // instances: 0,
       // exec_mode: 'cluster',
       // wait_ready: true,
