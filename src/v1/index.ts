@@ -13,7 +13,7 @@ router.get('/', (_req: Request, res: Response) => res.status(200).json({ version
 
 router.get('/comments', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const comments = await Comment.findAll({ order: ['createdAt', 'DESC'] });
+    const comments = await Comment.findAll({ order: [['createdAt', 'DESC']] });
 
     return res.status(200).json({ comments, error: 0 });
   } catch (err) {
