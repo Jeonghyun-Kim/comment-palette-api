@@ -3,11 +3,22 @@ import { Request, Response, NextFunction, Router } from 'express';
 import * as sha256 from 'sha256';
 
 import { Comment } from '../models/Comment';
+import { Contact } from '../models/Contact';
 import { Subscription } from '../models/Subscription';
+import sendEmail from './mailer';
 import logger from '../config/winston_config';
 
 const router: Router = express.Router();
 const version: string = '1.0.0';
+
+interface MailContent {
+  index: number;
+  name: string;
+  email: string;
+  phone?: number;
+  content: string;
+  subscription: boolean;
+}
 
 router.get('/', (_req: Request, res: Response) => res.status(200).json({ version }));
 
@@ -123,6 +134,32 @@ router.delete('/subscription', async (req: Request, res: Response, next: NextFun
 
     logger.info(`[SUBSCRIPTION DELETED] email: ${email}`);
     return res.status(200).json({ error: 0 });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.post('/contact', async (req: Request, res: Response, next: NextFunction) => {
+  const { index, name, email, phone, content, subscription = false } = req.body;
+  if (!index || !name || !email || !content) {
+    return res.status(400).json({ error: 1 });
+  }
+
+  try {
+    await Contact.create({ index, name, email, phone, content });
+
+    if (subscription) {
+      const exEmail = await Subscription.findOne({ where: { email } });
+      if (!exEmail) {
+        await Subscription.create({ email });
+      }
+    }
+
+    logger.info(`[CONTACT CREATED] index: ${index}, name: ${name}, email: ${email}`);
+
+    sendEmail(email, { index, name, email, phone, content, subscription } as MailContent);
+
+    return res.status(201).json({ error: 0 });
   } catch (err) {
     return next(err);
   }

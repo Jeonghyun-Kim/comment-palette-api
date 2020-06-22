@@ -19,16 +19,11 @@ interface Err extends Error {
   status: number;
 }
 
-const portHttp = 80;
+const portHttp = 8080;
 const portHttps = 443;
+const ssl = false;
 
 const app: Application = express();
-
-const sslOptions = {
-  ca: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/fullchain.pem'),
-  key: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/cert.pem'),
-};
 
 sequelize.sync();
 // sequelize.sync({ force: true });
@@ -72,6 +67,14 @@ http.createServer(app).listen(portHttp, () => {
   logger.info(`HTTP SERVER LISTIENING ON PORT ${portHttp}`);
 });
 
-https.createServer(sslOptions, app).listen(portHttps, () => {
-  logger.info(`HTTPS SERVER LISTIENING ON PORT ${portHttps}`);
-});
+if (ssl) {
+  const sslOptions = {
+    ca: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/api.airygall.com/cert.pem'),
+  };
+
+  https.createServer(sslOptions, app).listen(portHttps, () => {
+    logger.info(`HTTPS SERVER LISTIENING ON PORT ${portHttps}`);
+  });
+}
