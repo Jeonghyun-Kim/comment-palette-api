@@ -19,9 +19,9 @@ interface Err extends Error {
   status: number;
 }
 
-const portHttp = 8080;
+const portHttp = 80;
 const portHttps = 443;
-const ssl = false;
+const ssl = true;
 
 const app: Application = express();
 
