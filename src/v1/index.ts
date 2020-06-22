@@ -165,4 +165,14 @@ router.post('/contact', async (req: Request, res: Response, next: NextFunction) 
   }
 });
 
+router.get('/contacts', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const contacts = await Contact.findAll();
+
+    return res.status(200).json({ contacts, error: 0 });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 export default router;
