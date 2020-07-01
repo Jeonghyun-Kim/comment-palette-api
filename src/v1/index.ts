@@ -1,13 +1,27 @@
 import * as express from 'express';
+import * as path from 'path';
 import { Request, Response, NextFunction, Router } from 'express';
 import * as sha256 from 'sha256';
+import * as multer from 'multer';
+import { uuid } from 'uuidv4';
 
 import { Comment } from '../models/Comment';
 import { Contact } from '../models/Contact';
 import { Subscription } from '../models/Subscription';
+import { Signature } from '../models/Signature';
 import sendEmail from './mailer';
 import logger from '../config/winston_config';
 
+const uploadLocal = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => {
+      cb(null, './public/signatures/');
+    },
+    filename: (_req, file, cb) => {
+      cb(null, uuid() + path.extname(file.originalname));
+    },
+  }),
+});
 const router: Router = express.Router();
 const version: string = '1.0.0';
 
@@ -111,7 +125,7 @@ router.post('/subscription', async (req: Request, res: Response, next: NextFunct
   }
 });
 
-router.get('/subscriptions', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/subscriptions', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const subscriptions = await Subscription.findAll();
 
@@ -165,11 +179,31 @@ router.post('/contact', async (req: Request, res: Response, next: NextFunction) 
   }
 });
 
-router.get('/contacts', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/contacts', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const contacts = await Contact.findAll();
 
     return res.status(200).json({ contacts, error: 0 });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.get('/signatures', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const signatures = await Signature.findAll({ order: [['createdAt', 'DESC']] });
+
+    return res.status(200).json({ signatures, error: 0 });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.post('/signature', uploadLocal.single('signature'), async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const signature = await Signature.create({ url: req.file.filename });
+
+    return res.status(201).json({ signature, error: 0 });
   } catch (err) {
     return next(err);
   }

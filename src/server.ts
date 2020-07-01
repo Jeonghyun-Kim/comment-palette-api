@@ -28,6 +28,7 @@ const app: Application = express();
 sequelize.sync();
 // sequelize.sync({ force: true });
 
+// app.use(cors({ origin: /ondisplay\.co\.kr$/ }));
 app.use(cors());
 app.use(helmet());
 
@@ -37,6 +38,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use(morgan('dev'));
 }
 
+app.use(express.static('./public'));
 app.use(bodyParser.json());
 
 app.use('/', indexRouter);
