@@ -23,7 +23,7 @@ const uploadLocal = multer({
   }),
 });
 const router: Router = express.Router();
-const version: string = '1.0.1';
+const version: string = '1.0.2';
 
 interface MailContent {
   index: number;
@@ -200,19 +200,9 @@ router.get('/signatures', async (_req: Request, res: Response, next: NextFunctio
 });
 
 router.post('/signature', uploadLocal.single('signature'), async (req: Request, res: Response, next: NextFunction) => {
-  const { content, subscription = false, email } = req.body;
+  const { content } = req.body;
   try {
     const signature = await Signature.create({ url: req.file.filename, content });
-
-    if (subscription) {
-      if (!email) {
-        return res.status(400).json({ error: 400 });
-      }
-      const exEmail = await Subscription.findOne({ where: { email } });
-      if (!exEmail) {
-        await Subscription.create({ email });
-      }
-    }
 
     return res.status(201).json({ signature, error: 0 });
   } catch (err) {
