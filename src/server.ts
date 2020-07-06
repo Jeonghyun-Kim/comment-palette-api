@@ -58,7 +58,7 @@ app.use((err: Err, _req: Request, res: Response, _next: NextFunction) => {
   }
 
   if (err.name === 'SequelizeUniqueConstraintError') {
-    return res.status(400).json({ error: 2 });
+    return res.status(200).json({ error: 2 });
   }
 
   if (process.env.NODE_ENV === 'production') {
