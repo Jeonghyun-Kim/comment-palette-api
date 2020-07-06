@@ -160,7 +160,11 @@ router.post('/contact', async (req: Request, res: Response, next: NextFunction) 
   }
 
   try {
-    await Contact.create({ index, name, email, phone, content });
+    if (phone) {
+      await Contact.create({ index, name, email, phone, content });
+    } else {
+      await Contact.create({ index, name, email, content });
+    }
 
     if (subscription) {
       const exEmail = await Subscription.findOne({ where: { email } });
