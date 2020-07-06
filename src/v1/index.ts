@@ -23,7 +23,7 @@ const uploadLocal = multer({
   }),
 });
 const router: Router = express.Router();
-const version: string = '1.0.2';
+const version: string = '1.0.3';
 
 interface MailContent {
   index: number;
@@ -129,7 +129,7 @@ router.get('/subscriptions', async (_req: Request, res: Response, next: NextFunc
   try {
     const subscriptions = await Subscription.findAll();
 
-    return res.status(200).json({ subscriptions, error: 0 });
+    return res.status(200).json({ count: subscriptions.length, error: 0 });
   } catch (err) {
     return next(err);
   }
