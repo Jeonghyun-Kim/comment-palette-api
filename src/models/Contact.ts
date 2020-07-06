@@ -26,7 +26,7 @@ export class Contact extends Model<Contact> {
   email!: string;
 
   @Column
-  phone?: number;
+  phone?: string;
 
   @Length({ min: 3, max: 1000 })
   @Column(DataType.TEXT)
