@@ -31,7 +31,7 @@ export default function sendEmail(fromEmail: string, content: MailContent) {
   const mailOptions = {
     from: process.env.MAILER_EMAIL,
     to: toEmail,
-    subject: 'Contact from artfair.site',
+    subject: 'Contact from onDisplay.co.kr',
     text: `    index: ${content.index}\n
     name: ${content.name}\n
     email: ${content.email}\n
