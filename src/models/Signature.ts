@@ -17,6 +17,9 @@ export class Signature extends Model<Signature> {
   @Column(DataType.TEXT)
   url!: string;
 
+  @Column(DataType.TEXT)
+  content?: string;
+
   @CreatedAt
   @Column
   createdAt!: Date;
