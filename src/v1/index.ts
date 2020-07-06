@@ -23,7 +23,7 @@ const uploadLocal = multer({
   }),
 });
 const router: Router = express.Router();
-const version: string = '1.0.3';
+const version: string = '1.0.4';
 
 interface MailContent {
   index: number;
@@ -193,7 +193,7 @@ router.get('/signatures', async (_req: Request, res: Response, next: NextFunctio
   try {
     const signatures = await Signature.findAll({ order: [['createdAt', 'DESC']] });
 
-    return res.status(200).json({ signatures, error: 0 });
+    return res.status(200).json({ count: signatures.length, error: 0 });
   } catch (err) {
     return next(err);
   }
