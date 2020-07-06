@@ -57,6 +57,10 @@ app.use((err: Err, _req: Request, res: Response, _next: NextFunction) => {
     return res.status(400).json({ error: 400 });
   }
 
+  if (err.name === 'SequelizeUniqueConstraintError') {
+    return res.status(400).json({ error: 2 });
+  }
+
   if (process.env.NODE_ENV === 'production') {
     return res.status(err.status || 500).json({ errName: err.name || 'InternalServerError' });
   }
