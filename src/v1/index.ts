@@ -23,7 +23,7 @@ const uploadLocal = multer({
   }),
 });
 const router: Router = express.Router();
-const version: string = '1.0.0';
+const version: string = '1.0.1';
 
 interface MailContent {
   index: number;
