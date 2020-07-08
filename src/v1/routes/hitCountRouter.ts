@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { Request, Response, NextFunction, Router } from 'express';
 import { HitCount } from '../../models/HitCount';
+import { HitCountContact } from '../../models/HitCountContact';
 
 // import logger from '../../config/winston_config';
 
@@ -119,13 +120,13 @@ router.get('/list', async (req: Request, res: Response, next: NextFunction) => {
 
     hitCount = await HitCount.create({ ...exHitCount, list: exHitCount.list + 1 });
 
-    return res.status(201).json({ hitCount });
+    return res.status(201).json({ hitCount, error: 0 });
   } catch (err) {
     return next(err);
   }
 });
 
-router.get('/viewingRoom', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/viewingroom', async (req: Request, res: Response, next: NextFunction) => {
   try {
     let hitCount = await HitCount.findOne({
       order: [['id', 'DESC']],
@@ -139,7 +140,7 @@ router.get('/viewingRoom', async (req: Request, res: Response, next: NextFunctio
 
     hitCount = await HitCount.create({ ...exHitCount, viewingRoom: exHitCount.viewingRoom + 1 });
 
-    return res.status(201).json({ hitCount });
+    return res.status(201).json({ hitCount, error: 0 });
   } catch (err) {
     return next(err);
   }
@@ -159,7 +160,7 @@ router.get('/history', async (req: Request, res: Response, next: NextFunction) =
 
     hitCount = await HitCount.create({ ...exHitCount, history: exHitCount.history + 1 });
 
-    return res.status(201).json({ hitCount });
+    return res.status(201).json({ hitCount, error: 0 });
   } catch (err) {
     return next(err);
   }
@@ -179,7 +180,29 @@ router.get('/guest', async (req: Request, res: Response, next: NextFunction) => 
 
     hitCount = await HitCount.create({ ...exHitCount, guest: exHitCount.guest + 1 });
 
-    return res.status(201).json({ hitCount });
+    return res.status(201).json({ hitCount, error: 0 });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.get('/contact/:idx', async (req: Request, res: Response, next: NextFunction) => {
+  const { idx } = req.params;
+  try {
+    await HitCountContact.create({ painting: true, poster: false, index: Number(idx) });
+
+    return res.status(201).json({ error: 0 });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.get('/poster/:idx', async (req: Request, res: Response, next: NextFunction) => {
+  const { idx } = req.params;
+  try {
+    await HitCountContact.create({ painting: false, poster: true, index: Number(idx) });
+
+    return res.status(201).json({ error: 0 });
   } catch (err) {
     return next(err);
   }
