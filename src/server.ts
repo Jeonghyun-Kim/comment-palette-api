@@ -12,6 +12,7 @@ import 'dotenv/config';
 import logger from './config/winston_config';
 import { sequelize } from './sequelize';
 import indexRouter from './v1/index';
+import hitCountRouter from './v1/routes/hitCountRouter';
 
 const CUSTOM: string = ':remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
 
@@ -42,6 +43,7 @@ app.use(express.static('./public'));
 app.use(bodyParser.json());
 
 app.use('/', indexRouter);
+app.use('/hitcount', hitCountRouter);
 
 app.all('*', (_req: Request, _res: Response, next: NextFunction) => {
   const error = new Error('404 NOT FOUND') as Err;
